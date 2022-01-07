@@ -1,9 +1,9 @@
 package minio
 
 import (
-	minio "github.com/minio/minio-go/v7"
+	"github.com/minio/madmin-go"
+	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/minio/minio/pkg/madmin"
 )
 
 //S3MinioConfig defines variable for minio
@@ -84,11 +84,6 @@ type S3MinioIAMGroupPolicyConfig struct {
 	MinioIAMNamePrefix string
 	MinioIAMPolicy     string
 	MinioIAMGroup      string
-}
-
-// Error represents a basic error that implies the error interface.
-type Error struct {
-	Message string
 }
 
 //Stmt defines policy statement

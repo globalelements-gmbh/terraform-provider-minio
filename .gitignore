@@ -11,11 +11,15 @@ plan.bin
 # .tfvars files
 *.tfvars
 *.log
+*.env
 
 # .DS_Store file
-.DS_Store 
+.DS_Store
 
-#go packages
+# go packages
 vendor/*
 .vscode
 .idea
+
+# other stuff
+public_key.asc

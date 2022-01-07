@@ -1,17 +1,17 @@
 package minio
 
 import (
+	"bytes"
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"hash/crc32"
+	"io/ioutil"
 	"log"
 	"strconv"
-	"strings"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	iampolicy "github.com/minio/minio/pkg/iam/policy"
 )
 
 const (
@@ -144,10 +144,30 @@ func Contains(slice []string, item string) bool {
 }
 
 // ParseIamPolicyConfigFromString parses an IamPolicy Config from a string.
-func ParseIamPolicyConfigFromString(policy string) *iampolicy.Policy {
-	parsedPolicy, err := iampolicy.ParseConfig(strings.NewReader(policy))
+func ParseIamPolicyConfigFromString(policy string) []byte {
+	buffer := bytes.NewBufferString(policy)
+	readBuf, err := ioutil.ReadAll(buffer)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return parsedPolicy
+
+	return readBuf
+}
+
+// HashcodeString hashes a string to a unique hashcode.
+//
+// crc32 returns a uint32, but for our use we need
+// and non negative integer. Here we cast to an integer
+// and invert it if the result is negative.
+func HashcodeString(s string) int {
+	v := int(crc32.ChecksumIEEE([]byte(s)))
+	if v >= 0 {
+		return v
+	}
+	if -v >= 0 {
+		return -v
+	}
+	// v == MinInt
+	return 0
 }

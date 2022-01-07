@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/minio/minio/pkg/madmin"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/minio/madmin-go"
 )
 
 func resourceMinioIAMGroup() *schema.Resource {
